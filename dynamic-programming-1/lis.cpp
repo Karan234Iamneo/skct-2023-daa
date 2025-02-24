@@ -1,42 +1,35 @@
-import java.util.Scanner ;
+#include <iostream>
+#include <vector>
+using namespace std;
 
-/* Dynamic Programming Java implementation of LIS problem */
+// Function to find the length of the longest increasing subsequence
+int lis(vector<int>& arr, int n) {
+    vector<int> lis(n, 1); // Initialize LIS array with 1
+    int max_lis = 1;
 
-class Main {
-	/* lis() returns the length of the longest increasing
-	subsequence in arr[] of size n */
-	static int lis(int arr[], int n)
-	{
-		int lis[] = new int[n];
-		int i, j, max = 0;
+    // Compute LIS values in bottom-up manner
+    for (int i = 1; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (arr[i] > arr[j] && lis[i] < lis[j] + 1) {
+                lis[i] = lis[j] + 1;
+            }
+        }
+        max_lis = max(max_lis, lis[i]); // Keep track of max LIS value
+    }
 
-		/* Initialize LIS values for all indexes */
-		for (i = 0; i < n; i++)
-			lis[i] = 1;
+    return max_lis;
+}
 
-		/* Compute optimized LIS values in bottom up manner */
-		for (i = 1; i < n; i++)
-			for (j = 0; j < i; j++)
-				if (arr[i] > arr[j] && lis[i] < lis[j] + 1)
-					lis[i] = lis[j] + 1;
+int main() {
+    int n;
+    cin >> n;
 
-		/* Pick maximum of all LIS values */
-		for (i = 0; i < n; i++)
-			if (max < lis[i])
-				max = lis[i];
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
 
-		return max;
-	}
+    cout << lis(arr, n) << endl;
 
-	public static void main(String args[])
-	{
-	    Scanner sc = new Scanner(System.in) ;
-	    int n = sc.nextInt() ;
-	    int arr[] = new int[n] ;
-	    
-	    for(int i = 0 ; i < n ; i++)
-	        arr[i] = sc.nextInt() ;
-	        
-		System.out.println(lis(arr, n)) ;
-	}
+    return 0;
 }
